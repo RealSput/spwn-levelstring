@@ -1,0 +1,45 @@
+extract obj_props
+
+isEven = (x: @number) {
+    return (x % 2) as @bool
+}
+
+add_lvl = (let lvlstr) {
+    lvlstr = lvlstr.split(";");
+
+    let objects = [];
+
+    for x in lvlstr {
+        let my_obj = obj {}
+        spl = x.split(',');
+        let obj_id;
+        for z in 0..spl.length {
+            if isEven(z) {
+            	if spl[z - 1] as @number == 1 {
+                	obj_id = spl[z];
+            	}
+                if spl[z - 1] as @number == 57 {
+                    if (!spl[z].contains('.')) {
+                        $.edit_obj(my_obj, spl[z - 1] as @number, @group(spl[z] as @number))
+                    } else {
+                        $.edit_obj(my_obj, spl[z - 1] as @number, spl[z].split('.').map(x => (x as @number) as @group))
+                    }
+                } else if spl[z - 1] as @number == 31 {
+                    $.edit_obj(my_obj, spl[z - 1] as @number, spl[z])
+                } else if obj_id == 1816 && spl[z - 1] == 80 {
+                    $.edit_obj(my_obj, spl[z - 1] as @number, @block(spl[z] as @number))
+                } else {
+                  $.edit_obj(my_obj, spl[z - 1] as @number, spl[z] as @number)
+                }
+            }
+        }
+
+        objects.push(my_obj)
+    }
+
+    for i in objects {
+        $.add(i)
+    }
+}
+
+return add_lvl;
